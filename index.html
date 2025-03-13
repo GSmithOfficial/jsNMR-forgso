@@ -4,35 +4,26 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Interactive NMR Viewer</title>
-
     <!-- jsNMR Styles -->
     <link rel="stylesheet" href="./examples/style.css">
-
-    <!-- RequireJS for dependency management -->
-    <script src="./lib/components/requirejs/require.js"></script>
-
+    <link rel="icon" href="https://gsmithofficial.github.io/favicon.ico">
+    <!-- Load dependencies directly -->
+    <script src="./lib/components/jquery/dist/jquery.min.js"></script>
+    <script src="./lib/components/jsgraph/dist/jsgraph.js"></script>
+    <script src="./lib/components/jcampconverter/build/jcampconverter.js"></script>
+    <script src="./dist/jsnmr.js"></script>
     <script>
-        require.config({
-            paths: {
-                jquery: './lib/components/jquery/dist/jquery.min',
-                jsgraph: './lib/components/jsgraph/dist/jsgraph',
-                jcampconverter: './lib/components/jcampconverter/build/jcampconverter',
-                jsnmr: './dist/jsnmr.min'
-            },
-            shim: {
-                'jsgraph': { deps: ['jquery'] },
-                'jcampconverter': { deps: ['jquery'] },
-                'jsnmr': { deps: ['jquery', 'jsgraph', 'jcampconverter'] }
+        document.addEventListener('DOMContentLoaded', function() {
+            if (typeof jsNMR !== 'undefined') {
+                jsNMR.init('nmr-container', {
+                    spectrum: './test/121-97-1_hsqcetgp.jdx'
+                });
+            } else {
+                console.error("jsNMR library not loaded properly");
+                document.getElementById('nmr-container').innerHTML = 
+                    '<p>Error: jsNMR library could not be loaded. Check console for details.</p>';
             }
         });
-
-        require(['jquery', 'jsgraph', 'jcampconverter', 'jsnmr'], function($, JSGraph, JcampConverter, jsNMR) {
-    $(document).ready(function(){
-        jsNMR.init('nmr-container', {
-            spectrum: './test/121-97-1_hsqcetgp.jdx'
-        });
-    });
-});
     </script>
 </head>
 <body>

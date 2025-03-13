@@ -4,65 +4,50 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Interactive NMR Viewer</title>
+    <!-- Add an inline favicon to prevent 404 -->
+    <link rel="icon" href="data:,">
     <!-- jsNMR Styles -->
     <link rel="stylesheet" href="./examples/style.css">
-    <!-- Avoid favicon error -->
-    <link rel="icon" href="data:,">
     
-    <!-- Load all dependencies directly -->
+    <!-- Load each library separately and in the correct order -->
     <script src="./lib/components/jquery/dist/jquery.min.js"></script>
+    
+    <!-- Make sure the Graph dependency is loaded before jsNMR -->
     <script src="./lib/components/jsgraph/dist/jsgraph.js"></script>
+    
+    <!-- Load JcampConverter before jsNMR -->
     <script src="./lib/components/jcampconverter/build/jcampconverter.js"></script>
+    
+    <!-- Load jsNMR last -->
     <script src="./dist/jsnmr.js"></script>
     
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Check if each required library is loaded
-            if (typeof $ === 'undefined') {
+        // Wait for everything to load
+        window.onload = function() {
+            // Verify libraries are loaded
+            if (typeof jQuery === 'undefined') {
                 console.error("jQuery not loaded");
-                showError("jQuery library could not be loaded");
                 return;
             }
             
-            if (typeof JSGraph === 'undefined') {
-                console.error("JSGraph not loaded");
-                showError("JSGraph library could not be loaded");
-                return;
-            }
-            
-            if (typeof JcampConverter === 'undefined') {
-                console.error("JcampConverter not loaded");
-                showError("JcampConverter library could not be loaded");
-                return;
-            }
-            
+            // Check if the main library is available
             if (typeof jsNMR === 'undefined') {
                 console.error("jsNMR not loaded");
-                showError("jsNMR library could not be loaded");
                 return;
             }
             
-            // Initialize jsNMR if all libraries are loaded
+            // Initialize jsNMR
             try {
+                console.log("Attempting to initialize jsNMR...");
                 jsNMR.init('nmr-container', {
                     spectrum: './test/121-97-1_hsqcetgp.jdx'
                 });
-                
-                console.log("jsNMR initialized successfully");
             } catch (e) {
                 console.error("Error initializing jsNMR:", e);
-                showError("Error initializing jsNMR: " + e.message);
+                document.getElementById('nmr-container').innerHTML = 
+                    '<p style="color: red;">Error initializing jsNMR: ' + e.message + '</p>';
             }
-        });
-        
-        function showError(message) {
-            document.getElementById('nmr-container').innerHTML = 
-                '<div style="color: red; padding: 20px;">' +
-                '<h3>Error</h3>' +
-                '<p>' + message + '</p>' +
-                '<p>Check the browser console for more details.</p>' +
-                '</div>';
-        }
+        };
     </script>
 </head>
 <body>

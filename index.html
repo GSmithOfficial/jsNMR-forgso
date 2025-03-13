@@ -5,19 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Interactive NMR Viewer</title>
 
-    <!-- jsGraph CSS for jsNMR -->
+    <!-- jsNMR Styles -->
     <link rel="stylesheet" href="./examples/style.css">
 
-    <!-- Load jQuery (correct path from your structure) -->
+    <!-- jQuery -->
     <script src="./lib/components/jquery/dist/jquery.min.js"></script>
 
-    <!-- jsGraph library required by jsNMR -->
+    <!-- jsGraph -->
     <script src="./lib/components/jsgraph/dist/jsgraph.min.js"></script>
 
-    <!-- JCAMP converter required by jsNMR -->
-    <script src="./lib/components/jcampconverter/dist/jcampconverter.min.js"></script>
+    <!-- JCAMP Converter -->
+    <script src="./lib/components/jcampconverter/build/jcampconverter.js"></script>
 
-    <!-- Finally load jsNMR -->
+    <!-- jsNMR main library -->
     <script src="./dist/jsnmr.min.js"></script>
 </head>
 <body>
@@ -27,7 +27,7 @@
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             jsNMR.init('nmr-container', {
-                spectrum: './test/121-97-1_hsqcetgp.jdx'  // confirm this file exists
+                spectrum: './test/121-97-1_hsqcetgp.jdx'
             });
         });
     </script>

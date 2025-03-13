@@ -15,7 +15,7 @@
         require.config({
             paths: {
                 jquery: './lib/components/jquery/dist/jquery.min',
-                jsgraph: './lib/components/jsgraph/dist/jsgraph.min',
+                jsgraph: './lib/components/jsgraph/dist/jsgraph',
                 jcampconverter: './lib/components/jcampconverter/build/jcampconverter',
                 jsnmr: './dist/jsnmr.min'
             },
@@ -26,13 +26,13 @@
             }
         });
 
-        require(['jquery', 'jsgraph', 'jcampconverter', 'jsnmr'], function($) {
-            $(document).ready(function(){
-                jsNMR.init('nmr-container', {
-                    spectrum: './test/121-97-1_hsqcetgp.jdx'
-                });
-            });
+        require(['jquery', 'jsgraph', 'jcampconverter', 'jsnmr'], function($, JSGraph, JcampConverter, jsNMR) {
+    $(document).ready(function(){
+        jsNMR.init('nmr-container', {
+            spectrum: './test/121-97-1_hsqcetgp.jdx'
         });
+    });
+});
     </script>
 </head>
 <body>

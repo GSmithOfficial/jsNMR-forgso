@@ -4,151 +4,98 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>jsNMR Viewer</title>
-    
-    <!-- Prevent favicon errors -->
-    <link rel="icon" href="data:,">
-    
-    <!-- Load dependencies based on the repository structure -->
+
+    <!-- jsNMR dependencies -->
     <script src="./lib/components/jquery/dist/jquery.min.js"></script>
     <script src="./lib/components/jsgraph/dist/jsgraph.min.js"></script>
     <script src="./lib/components/jcampconverter/build/jcampconverter.js"></script>
-    
-    <!-- Load the main jsNMR library -->
     <script src="./dist/jsnmr.min.js"></script>
-    
+
+    <!-- jsNMR Styles -->
+    <link rel="stylesheet" href="./examples/style.css">
+
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-        
-        h1 {
-            color: #333;
-        }
-        
-        .container {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-        
         #nmr-container {
             width: 100%;
             height: 600px;
             border: 1px solid #ccc;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            margin-top: 10px;
         }
-        
+
         .controls {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 10px;
+            margin-bottom: 15px;
         }
-        
+
         button {
-            padding: 8px 12px;
             background-color: #4CAF50;
             color: white;
+            padding: 8px 16px;
             border: none;
-            border-radius: 4px;
             cursor: pointer;
+            border-radius: 4px;
         }
-        
+
         button:hover {
             background-color: #45a049;
         }
-        
-        .file-input {
-            margin-bottom: 10px;
-        }
-        
-        .status {
-            padding: 10px;
-            margin-top: 10px;
-            background-color: #f8f8f8;
-            border-left: 4px solid #4CAF50;
+
+        #status {
+            margin-top: 15px;
+            color: #333;
+            font-weight: bold;
         }
     </style>
-    
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Display initialization status
-            const statusElement = document.getElementById('status');
-            statusElement.textContent = 'Checking dependencies...';
-            
-            // Verify jQuery is loaded
-            if (typeof jQuery === 'undefined') {
-                statusElement.textContent = 'Error: jQuery not loaded';
-                statusElement.style.borderLeftColor = 'red';
-                return;
-            }
-            
-            // Wait for everything to load
-            $(document).ready(function() {
-                try {
-                    // Check if jsNMR is available
-                    if (typeof jsNMR === 'undefined') {
-                        statusElement.textContent = 'Error: jsNMR library not loaded';
-                        statusElement.style.borderLeftColor = 'red';
-                        return;
-                    }
-                    
-                    // Initialize the NMR viewer with a default spectrum
-                    statusElement.textContent = 'Initializing jsNMR...';
-                    
-                    jsNMR.init('nmr-container', {
-                        // If you have a sample spectrum file in your repo:
-                        spectrum: './examples/data/ethylbenzene.jdx'
-                    });
-                    
-                    statusElement.textContent = 'jsNMR initialized successfully! Use the controls to manipulate the spectrum.';
-                    
-                    // Set up button controls
-                    $('#zoom-reset').on('click', function() {
-                        jsNMR.resetZoom();
-                    });
-                    
-                    $('#file-input').on('change', function(e) {
-                        const file = e.target.files[0];
-                        if (file) {
-                            const reader = new FileReader();
-                            reader.onload = function(e) {
-                                jsNMR.loadData(e.target.result);
-                                statusElement.textContent = 'Loaded: ' + file.name;
-                            };
-                            reader.readAsText(file);
-                        }
-                    });
-                    
-                } catch (e) {
-                    statusElement.textContent = 'Error initializing jsNMR: ' + e.message;
-                    statusElement.style.borderLeftColor = 'red';
-                    console.error(e);
-                }
-            });
-        });
-    </script>
 </head>
 <body>
     <h1>jsNMR Viewer</h1>
-    
-    <div class="container">
-        <div class="controls">
-            <button id="zoom-reset">Reset Zoom</button>
-            <div class="file-input">
-                <label for="file-input">Load JCAMP-DX file:</label>
-                <input type="file" id="file-input" accept=".jdx,.dx">
-            </div>
-        </div>
-        
-        <div id="nmr-container"></div>
-        
-        <div id="status" class="status">Loading...</div>
+
+    <div class="controls">
+        <button id="zoom-reset">Reset Zoom</button>
+        <input type="file" id="file-input" accept=".jdx" />
     </div>
-    
-    <footer>
+
+    <div id="nmr-container"></div>
+
+    <div id="status">Loading...</div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const statusElement = document.getElementById('status');
+            
+            if (typeof jQuery === 'undefined' || typeof jsNMR === 'undefined') {
+                statusElement.textContent = 'Error: Required libraries not loaded.';
+                statusElement.style.color = 'red';
+                return;
+            }
+
+            jsNMR.init('nmr-container', {
+                spectrum: './test/121-97-1_hsqcetgp.jdx'
+            });
+
+            statusElement.textContent = 'jsNMR loaded successfully.';
+
+            document.getElementById('zoom-reset').addEventListener('click', function () {
+                jsNMR.resetZoom();
+            });
+
+            document.getElementById('file-input').addEventListener('change', function (e) {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function (event) {
+                        jsNMR.loadJcamp(e.target.result);
+                    };
+                reader.readAsText(file);
+            });
+        });
+    </script>
+
+    <div style="margin-top: 10px;">
+        <button id="zoom-reset">Reset Zoom</button>
+        <input type="file" id="file-input" accept=".jdx,.dx">
+    </div>
+
+    <footer style="margin-top: 20px;">
         <p>Based on <a href="https://github.com/GSmithOfficial/jsNMR-forgso" target="_blank">jsNMR-forgso</a></p>
     </footer>
 </body>

@@ -8,28 +8,35 @@
     <!-- jsNMR Styles -->
     <link rel="stylesheet" href="./examples/style.css">
 
-    <!-- jQuery -->
-    <script src="./lib/components/jquery/dist/jquery.min.js"></script>
+    <!-- RequireJS for dependency management -->
+    <script src="./lib/components/requirejs/require.js"></script>
 
-    <!-- jsGraph -->
-    <script src="./lib/components/jsgraph/dist/jsgraph.min.js"></script>
+    <script>
+        require.config({
+            paths: {
+                jquery: './lib/components/jquery/dist/jquery.min',
+                jsgraph: './lib/components/jsgraph/dist/jsgraph.min',
+                jcampconverter: './lib/components/jcampconverter/build/jcampconverter',
+                jsnmr: './dist/jsnmr.min'
+            },
+            shim: {
+                'jsgraph': { deps: ['jquery'] },
+                'jcampconverter': { deps: ['jquery'] },
+                'jsnmr': { deps: ['jquery', 'jsgraph', 'jcampconverter'] }
+            }
+        });
 
-    <!-- JCAMP Converter -->
-    <script src="./lib/components/jcampconverter/build/jcampconverter.js"></script>
-
-    <!-- jsNMR main library -->
-    <script src="./dist/jsnmr.min.js"></script>
+        require(['jquery', 'jsgraph', 'jcampconverter', 'jsnmr'], function($) {
+            $(document).ready(function(){
+                jsNMR.init('nmr-container', {
+                    spectrum: './test/121-97-1_hsqcetgp.jdx'
+                });
+            });
+        });
+    </script>
 </head>
 <body>
     <h1>Interactive NMR Spectrum Viewer</h1>
     <div id="nmr-container" style="width: 800px; height: 500px; border: 1px solid #ccc;"></div>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            jsNMR.init('nmr-container', {
-                spectrum: './test/121-97-1_hsqcetgp.jdx'
-            });
-        });
-    </script>
 </body>
 </html>

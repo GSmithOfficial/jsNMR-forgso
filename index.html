@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Interactive NMR Viewer</title>
     <link rel="stylesheet" href="./examples/style.css">
-    <script src="js/jsNMR.min.js"></script>
-    <script src="lib/components/jquery/jquery.min.js"></script>
+    <script src="./dist/jsnmr.min.js"></script>
+    <script src="./lib/components/jquery/jquery.min.js"></script>
 </head>
 <body>
     <h1>Interactive NMR Spectrum Viewer</h1>
@@ -14,14 +14,10 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            // Initialize the jsNMR viewer
             jsNMR.init('nmr-container', {
-                spectrum: './test/121-97-1_hsqcetgp.jdx' // Path to an example spectrum
+                spectrum: './test/121-97-1_hsqcetgp.jdx'  // Check that this spectrum file exists and is correctly named
             });
         });
     </script>
-
-    <!-- Include your jsNMR library -->
-    <script src="./js/jsNMR.min.js"></script>
 </body>
 </html>

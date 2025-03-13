@@ -6,24 +6,63 @@
     <title>Interactive NMR Viewer</title>
     <!-- jsNMR Styles -->
     <link rel="stylesheet" href="./examples/style.css">
-    <link rel="icon" href="https://gsmithofficial.github.io/favicon.ico">
-    <!-- Load dependencies directly -->
+    <!-- Avoid favicon error -->
+    <link rel="icon" href="data:,">
+    
+    <!-- Load all dependencies directly -->
     <script src="./lib/components/jquery/dist/jquery.min.js"></script>
     <script src="./lib/components/jsgraph/dist/jsgraph.js"></script>
     <script src="./lib/components/jcampconverter/build/jcampconverter.js"></script>
     <script src="./dist/jsnmr.js"></script>
+    
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            if (typeof jsNMR !== 'undefined') {
+            // Check if each required library is loaded
+            if (typeof $ === 'undefined') {
+                console.error("jQuery not loaded");
+                showError("jQuery library could not be loaded");
+                return;
+            }
+            
+            if (typeof JSGraph === 'undefined') {
+                console.error("JSGraph not loaded");
+                showError("JSGraph library could not be loaded");
+                return;
+            }
+            
+            if (typeof JcampConverter === 'undefined') {
+                console.error("JcampConverter not loaded");
+                showError("JcampConverter library could not be loaded");
+                return;
+            }
+            
+            if (typeof jsNMR === 'undefined') {
+                console.error("jsNMR not loaded");
+                showError("jsNMR library could not be loaded");
+                return;
+            }
+            
+            // Initialize jsNMR if all libraries are loaded
+            try {
                 jsNMR.init('nmr-container', {
                     spectrum: './test/121-97-1_hsqcetgp.jdx'
                 });
-            } else {
-                console.error("jsNMR library not loaded properly");
-                document.getElementById('nmr-container').innerHTML = 
-                    '<p>Error: jsNMR library could not be loaded. Check console for details.</p>';
+                
+                console.log("jsNMR initialized successfully");
+            } catch (e) {
+                console.error("Error initializing jsNMR:", e);
+                showError("Error initializing jsNMR: " + e.message);
             }
         });
+        
+        function showError(message) {
+            document.getElementById('nmr-container').innerHTML = 
+                '<div style="color: red; padding: 20px;">' +
+                '<h3>Error</h3>' +
+                '<p>' + message + '</p>' +
+                '<p>Check the browser console for more details.</p>' +
+                '</div>';
+        }
     </script>
 </head>
 <body>
